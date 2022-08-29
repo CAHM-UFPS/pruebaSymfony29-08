@@ -105,4 +105,9 @@ class Order
 
         return $this;
     }
+
+    public function getTotalPrice(): ?int
+    {
+        return ($this->unitaryprice*$this->quantity)-$this->discount;
+    }
 }

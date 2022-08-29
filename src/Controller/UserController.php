@@ -66,7 +66,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'deleteUser', methods: ['DELETE'])]
-    public function delete(User $user, UserRepository $userRepository) : JsonResponse
+    public function delete(User $user = null, UserRepository $userRepository) : JsonResponse
     {
         if(!$user)
         {
