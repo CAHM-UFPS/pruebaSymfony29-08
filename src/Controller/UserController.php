@@ -35,7 +35,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/read/{id}', name: 'listUserById', methods: ['GET'])]
-    public function readById(User $user) : JsonResponse
+    public function readById(User $user = null) : JsonResponse
     {
         if(!$user)
         {
