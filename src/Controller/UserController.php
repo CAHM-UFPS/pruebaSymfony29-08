@@ -42,7 +42,7 @@ class UserController extends AbstractController
             $this->json(['message'=>'User not found'], 404);
         }
 
-        return $this->json($userRepository->find($user));
+        return $this->json($userRepository->find($user->getId()));
     }
 
     #[Route('/update/{id}', name: 'updateUser', methods: ['PUT'])]
