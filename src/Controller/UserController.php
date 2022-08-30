@@ -35,14 +35,14 @@ class UserController extends AbstractController
     }
 
     #[Route('/read/{id}', name: 'listUserById', methods: ['GET'])]
-    public function readById(User $user = null, UserRepository $userRepository) : JsonResponse
+    public function readById(User $user = null) : JsonResponse
     {
         if(!$user)
         {
             $this->json(['message'=>'User not found'], 404);
         }
 
-        return $this->json($userRepository->find($user->getId()));
+        return $this->json($user);
     }
 
     #[Route('/update/{id}', name: 'updateUser', methods: ['PUT'])]
