@@ -25,7 +25,7 @@ class UserController extends AbstractController
             return $this->json($user);
         }
 
-        return $this->json([], 400);
+        return $this->json($form->getErrors(true), 400);
     }
 
     #[Route('/read', name: 'listUsers', methods: ['GET'])]
