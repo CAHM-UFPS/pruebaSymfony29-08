@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity('email')]
 class User
 {
     #[ORM\Id]
@@ -30,7 +32,6 @@ class User
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[Assert\Email]
-    #[Assert\Unique]
     private ?string $email = null;
 
     public function getId(): ?int
