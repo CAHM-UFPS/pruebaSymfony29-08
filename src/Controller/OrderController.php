@@ -17,13 +17,12 @@ class OrderController extends AbstractController
     #[Route('/create/{email}', name: 'createOrder', methods: ['POST'])]
     public function create(User $user = null, Request $request, OrderRepository $orderRepository) : JsonResponse
     {
-        $order = new Order();
-
         if(!$user)
         {
             $this->json(['message'=>'User not found'], 404);
         }
 
+        $order = new Order();
         $order->setUserid($user->getId());
         $form = $this->createForm(OrderType::class, $order);
         $form->submit($request->toArray());
