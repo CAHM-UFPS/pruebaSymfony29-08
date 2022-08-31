@@ -19,7 +19,7 @@ class OrderController extends AbstractController
     {
         if(!$user)
         {
-            $this->json(['message'=>'User not found'], 404);
+            return $this->json(['message'=>'User not found'], 404);
         }
 
         $order = new Order();
@@ -30,10 +30,10 @@ class OrderController extends AbstractController
         if($form->isValid() && $form->isSubmitted())
         {
             $orderRepository->add($order, true);
-            $this->json($order);
+            return $this->json($order);
         }
 
-        return $this->json([], 400);
+        return $this->json($form->getErrors(), 400);
     }
 
     #[Route('/read', name: 'listOrders', methods: ['GET'])]
@@ -70,7 +70,7 @@ class OrderController extends AbstractController
             return $this->json($order, 201);
         }
 
-        return $this->json([], 400);
+        return $this->json($form->getErrors(), 400);
     }
 
     #[Route('/delete/{id}', name: 'deleteOrder', methods: ['DELETE'])]
@@ -83,6 +83,6 @@ class OrderController extends AbstractController
 
         $orderRepository->remove($order, true);
 
-        return $this->json(['message'=>'Order deleted']);
+        return $this->json(['message'=>'Order deleted'], 204);
     }
 }
