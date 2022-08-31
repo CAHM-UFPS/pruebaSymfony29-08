@@ -72,8 +72,7 @@ class UserController extends AbstractController
         {
             $this->json(['message'=> 'User not found'], 404);
         }
-        var_dump($user);
-        die();
+        is_null($user);
         $userRepository->remove($user, true);
 
         return $this->json(['message'=> 'User deleted'], 200);
