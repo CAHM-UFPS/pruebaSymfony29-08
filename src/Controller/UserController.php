@@ -62,7 +62,7 @@ class UserController extends AbstractController
             return $this->json($user, 201);
         }
 
-        return $this->json([], 400);
+        return $this->json($form->getErrors(), 400);
     }
 
     #[Route('/delete/{id}', name: 'deleteUser', methods: ['DELETE'])]
@@ -72,7 +72,8 @@ class UserController extends AbstractController
         {
             $this->json(['message'=> 'User not found'], 404);
         }
-
+        var_dump($user);
+        die();
         $userRepository->remove($user, true);
 
         return $this->json(['message'=> 'User deleted'], 200);
