@@ -15,7 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
     #[Route('/create/{email}', name: 'createOrder', methods: ['POST'])]
-    #[Entity('User', expr: 'repository.findByOne(email)')]
     public function create(User $user = null, Request $request, OrderRepository $orderRepository) : JsonResponse
     {
         if(!$user)
