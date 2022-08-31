@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 #[Route('/user')]
 class UserController extends AbstractController
@@ -72,7 +73,7 @@ class UserController extends AbstractController
         {
             $this->json(['message'=> 'User not found'], 404);
         }
-        is_null($user);
+        
         $userRepository->remove($user, true);
 
         return $this->json(['message'=> 'User deleted'], 200);
