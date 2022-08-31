@@ -68,11 +68,11 @@ class UserController extends AbstractController
     #[Route('/delete/{id}', name: 'deleteUser', methods: ['DELETE'])]
     public function delete(User $user = null, UserRepository $userRepository) : JsonResponse
     {
-        if(!$user)
+        if(is_null($user))
         {
             $this->json(['message'=> 'User not found'], 404);
         }
-        is_null($user);
+
         $userRepository->remove($user, true);
 
         return $this->json(['message'=> 'User deleted'], 200);
