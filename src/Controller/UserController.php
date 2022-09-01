@@ -34,7 +34,7 @@ class UserController extends AbstractController
         return $this->json($userRepository->findAll());
     }
 
-    #[Route('/read/{id}', name: 'listUserById', methods: ['GET'])]
+    #[Route('/read/{email}', name: 'listUserById', methods: ['GET'])]
     public function readById(User $user = null) : JsonResponse
     {
         if(!$user)
@@ -45,7 +45,7 @@ class UserController extends AbstractController
         return $this->json($user);
     }
 
-    #[Route('/update/{id}', name: 'updateUser', methods: ['PUT'])]
+    #[Route('/update/{email}', name: 'updateUser', methods: ['PUT'])]
     public function update(User $user = null, Request $request, UserRepository $userRepository) : JsonResponse
     {
         if(!$user)
@@ -65,12 +65,12 @@ class UserController extends AbstractController
         return $this->json($form->getErrors(), 400);
     }
 
-    #[Route('/delete/{id}', name: 'deleteUser', methods: ['DELETE'])]
+    #[Route('/delete/{email}', name: 'deleteUser', methods: ['DELETE'])]
     public function delete(User $user = null, UserRepository $userRepository) : JsonResponse
     {
         if(!$user)
         {
-            $this->json(['message'=> 'User not found'], 404);
+            return $this->json(['message'=> 'User not found'], 404);
         }
 
         $userRepository->remove($user, true);

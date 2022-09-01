@@ -6,7 +6,6 @@ use App\Entity\Order;
 use App\Entity\User;
 use App\Form\OrderType;
 use App\Repository\OrderRepository;
-use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
