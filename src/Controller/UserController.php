@@ -45,7 +45,7 @@ class UserController extends AbstractController
         return $this->json($user);
     }
 
-    #[Route('/update/{id}', name: 'updateUser', methods: ['PUT'])]
+    #[Route('/update/{email}', name: 'updateUser', methods: ['PUT'])]
     public function update(User $user = null, Request $request, UserRepository $userRepository) : JsonResponse
     {
         if(!$user)
@@ -62,7 +62,7 @@ class UserController extends AbstractController
             return $this->json($user, 201);
         }
 
-        return $this->json($form->getErrors(), 400);
+        return $this->json($form->getErrors(true), 400);
     }
 
     #[Route('/delete/{email}', name: 'deleteUser', methods: ['DELETE'])]
@@ -75,6 +75,6 @@ class UserController extends AbstractController
 
         $userRepository->remove($user, true);
 
-        return $this->json(['message'=> 'User deleted'], 204);
+        return $this->json([],204);
     }
 }
