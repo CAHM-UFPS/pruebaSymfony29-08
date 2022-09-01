@@ -47,7 +47,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/update/{id}', name: 'updateUser', methods: ['PUT'])]
-    public function update(User $user=null, Request $request, UserRepository $userRepository) : JsonResponse
+    public function update(User $user = null, Request $request, UserRepository $userRepository) : JsonResponse
     {
         if(!$user)
         {
@@ -71,11 +71,11 @@ class UserController extends AbstractController
     {
         if(!$user)
         {
-            $this->json(['message'=> 'User not found'], 404);
+            return $this->json(['message'=> 'User not found'], 404);
         }
-        
+
         $userRepository->remove($user, true);
 
-        return $this->json(['message'=> 'User deleted'], 200);
+        return $this->json(['message'=> 'User deleted'], 204);
     }
 }

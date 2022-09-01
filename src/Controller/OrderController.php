@@ -6,6 +6,7 @@ use App\Entity\Order;
 use App\Entity\User;
 use App\Form\OrderType;
 use App\Repository\OrderRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,12 +16,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
     #[Route('/create/{email}', name: 'createOrder', methods: ['POST'])]
-    #[Entity('User', expr: 'repository.findByOne(email)')]
     public function create(User $user = null, Request $request, OrderRepository $orderRepository) : JsonResponse
     {
         if(!$user)
         {
-            $this->json(['message'=>'User not found'], 404);
+            return $this->json(['message'=>'User not found'], 404);
         }
 
         $order = new Order();
@@ -31,10 +31,10 @@ class OrderController extends AbstractController
         if($form->isValid() && $form->isSubmitted())
         {
             $orderRepository->add($order, true);
-            $this->json($order);
+            return $this->json($order);
         }
 
-        return $this->json([], 400);
+        return $this->json($form->getErrors(), 400);
     }
 
     #[Route('/read', name: 'listOrders', methods: ['GET'])]
@@ -43,15 +43,18 @@ class OrderController extends AbstractController
         return $this->json($orderRepository->findAll());
     }
 
-    #[Route('/read/{id}', name: 'listOrdersById', methods: ['GET'])]
-    public function readById(Order $order = null) : JsonResponse
+    #[Route('/read/{email}', name: 'listOrdersByEmail', methods: ['GET'])]
+    public function readById(User $user = null, OrderRepository $orderRepository) : JsonResponse
     {
-        if(!$order)
+        if(!$user)
         {
-            return $this->json(['message'=> 'Order not found'], 404);
+            return $this->json(['message'=> 'User not found'], 404);
         }
 
-        return $this->json($order);
+        return $this->json([
+            'email'=>$user->getEmail(),
+            'orders'=>$orderRepository->findBy(['userid'=>$user->getId()])
+        ]);
     }
 
     #[Route('/update/{id}', name: 'updateOrder', methods: ['PUT'])]
@@ -71,7 +74,7 @@ class OrderController extends AbstractController
             return $this->json($order, 201);
         }
 
-        return $this->json([], 400);
+        return $this->json($form->getErrors(), 400);
     }
 
     #[Route('/delete/{id}', name: 'deleteOrder', methods: ['DELETE'])]
@@ -84,6 +87,6 @@ class OrderController extends AbstractController
 
         $orderRepository->remove($order, true);
 
-        return $this->json(['message'=>'Order deleted']);
+        return $this->json(['message'=>'Order deleted'], 204);
     }
 }
