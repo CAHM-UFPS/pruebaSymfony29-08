@@ -45,7 +45,7 @@ class UserController extends AbstractController
         return $this->json($user);
     }
 
-    #[Route('/update/{email}', name: 'updateUser', methods: ['PUT'])]
+    #[Route('/update/{id}', name: 'updateUser', methods: ['PUT'])]
     public function update(User $user = null, Request $request, UserRepository $userRepository) : JsonResponse
     {
         if(!$user)
