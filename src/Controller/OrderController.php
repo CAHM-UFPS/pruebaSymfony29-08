@@ -6,6 +6,7 @@ use App\Entity\Order;
 use App\Entity\User;
 use App\Form\OrderType;
 use App\Repository\OrderRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,15 +43,18 @@ class OrderController extends AbstractController
         return $this->json($orderRepository->findAll());
     }
 
-    #[Route('/read/{id}', name: 'listOrdersById', methods: ['GET'])]
-    public function readById(Order $order = null) : JsonResponse
+    #[Route('/read/{email}', name: 'listOrdersByEmail', methods: ['GET'])]
+    public function readById(User $user = null, OrderRepository $orderRepository) : JsonResponse
     {
-        if(!$order)
+        if(!$user)
         {
-            return $this->json(['message'=> 'Order not found'], 404);
+            return $this->json(['message'=> 'User not found'], 404);
         }
 
-        return $this->json($order);
+        return $this->json([
+            'email'=>$user->getEmail(),
+            'orders'=>$orderRepository->findBy(['userid'=>$user->getId()])
+        ]);
     }
 
     #[Route('/update/{id}', name: 'updateOrder', methods: ['PUT'])]
