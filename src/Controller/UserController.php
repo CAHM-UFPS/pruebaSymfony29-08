@@ -39,7 +39,7 @@ class UserController extends AbstractController
     {
         if(!$user)
         {
-            $this->json(['message'=>'User not found'], 404);
+            return $this->json(['message'=>'User not found'], 404);
         }
 
         return $this->json($user);
@@ -50,7 +50,7 @@ class UserController extends AbstractController
     {
         if(!$user)
         {
-            $this->json(['message'=>'User not found'], 404);
+            return $this->json(['message'=>'User not found'], 404);
         }
 
         $form = $this->createForm(UserType::class, $user);
