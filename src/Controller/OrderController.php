@@ -56,12 +56,13 @@ class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/update/{id}', name: 'updateOrder', methods: ['PUT'])]
-    public function update(Order $order = null, Request $request, OrderRepository $orderRepository) : JsonResponse
+    #[Route('/update/user/{email}/order/{id}', name: 'updateOrder', methods: ['PUT'])]
+    #[Entity('Order', expr: 'repository.findByOne(id)')]
+    public function update(User $user = null, Order $order = null, Request $request, OrderRepository $orderRepository) : JsonResponse
     {
-        if(!$order)
+        if(!$user || !$order)
         {
-            return $this->json(['message'=>'Order not found'], 404);
+            return $this->json(['message'=>'Not found'], 404);
         }
 
         $form = $this->createForm(OrderType::class, $order);
@@ -76,16 +77,17 @@ class OrderController extends AbstractController
         return $this->json($form->getErrors(), 400);
     }
 
-    #[Route('/delete/{id}', name: 'deleteOrder', methods: ['DELETE'])]
-    public function delete(Order $order = null , OrderRepository $orderRepository)
+    #[Route('/delete/user/{email}/order/{id}', name: 'deleteOrder', methods: ['DELETE'])]
+    #[Entity('Order', expr: 'repository.findByOne(id)')]
+    public function delete(User $user = null, Order $order = null, OrderRepository $orderRepository)
     {
-        if(!$order)
+        if(!$user || !$order)
         {
-            return $this->json(['message'=>'Order not found'], 404);
+            return $this->json(['message'=>'User or Order not found'], 404);
         }
 
         $orderRepository->remove($order, true);
 
-        return $this->json(['message'=>'Order deleted'], 204);
+        return $this->json([], 204);
     }
 }
