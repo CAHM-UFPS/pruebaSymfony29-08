@@ -40,7 +40,7 @@ class UserController extends AbstractController
     {
         if(!$user)
         {
-            return $this->json(null, Response::HTTP_NOT_FOUND);
+            return $this->json([], Response::HTTP_NOT_FOUND);
         }
 
         return $this->json($user, Response::HTTP_OK);
@@ -51,7 +51,7 @@ class UserController extends AbstractController
     {
         if(!$user)
         {
-            return $this->json(null, Response::HTTP_NOT_FOUND);
+            return $this->json([], Response::HTTP_NOT_FOUND);
         }
 
         $form = $this->createForm(UserType::class, $user);
@@ -71,7 +71,7 @@ class UserController extends AbstractController
     {
         if(!$user)
         {
-            return $this->json(null, Response::HTTP_NOT_FOUND);
+            return $this->json([], Response::HTTP_NOT_FOUND);
         }
 
         $userRepository->remove($user, true);
