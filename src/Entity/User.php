@@ -35,7 +35,7 @@ class User
     private ?string $email = null;
 
     #[ORM\Column]
-    private ?bool $registerwelcome = null;
+    private ?bool $registerwelcome = false;
 
     public function getId(): ?int
     {

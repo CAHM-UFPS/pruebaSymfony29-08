@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Order;
 use App\Entity\User;
 use App\Form\OrderType;
+use App\Form\UserType;
 use App\Repository\OrderRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +22,7 @@ class OrderController extends AbstractController
     {
         if(!$user)
         {
-            return $this->json(null, Response::HTTP_NOT_FOUND);
+            return $this->json(null ,Response::HTTP_NOT_FOUND);
         }
 
         $order = new Order();
@@ -87,11 +89,24 @@ class OrderController extends AbstractController
     {
         if(!$user || !$order)
         {
-            return $this->json(null, Response::HTTP_NOT_FOUND);
+            return $this->json([], Response::HTTP_NOT_FOUND);
         }
 
         $orderRepository->remove($order, true);
 
         return $this->json([], Response::HTTP_NO_CONTENT);
+    }
+
+    #[Route('/delete/{id}', name: 'deleteOrderById', methods: ['DELETE'])]
+    public function deleteById(Order $order = null, OrderRepository $orderRepository)
+    {
+        if(!$order)
+        {
+            return $this->json([], Response::HTTP_NOT_FOUND);
+        }
+
+        $orderRepository->remove($order, true);
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 }
