@@ -8,6 +8,7 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/user')]
@@ -22,10 +23,10 @@ class UserController extends AbstractController
 
         if($form->isValid() && $form->isSubmitted()){
             $userRepository->add($user, true);
-            return $this->json($user);
+            return $this->json($user, Response::HTTP_CREATED);
         }
 
-        return $this->json($form->getErrors(true), 400);
+        return $this->json($form->getErrors(true), Response::HTTP_BAD_REQUEST);
     }
 
     #[Route('/read', name: 'listUsers', methods: ['GET'])]
@@ -39,10 +40,10 @@ class UserController extends AbstractController
     {
         if(!$user)
         {
-            return $this->json(['message'=>'User not found'], 404);
+            return $this->json(null, Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json($user);
+        return $this->json($user, Response::HTTP_OK);
     }
 
     #[Route('/update/{email}', name: 'updateUser', methods: ['PUT'])]
@@ -50,7 +51,7 @@ class UserController extends AbstractController
     {
         if(!$user)
         {
-            return $this->json(['message'=>'User not found'], 404);
+            return $this->json(null, Response::HTTP_NOT_FOUND);
         }
 
         $form = $this->createForm(UserType::class, $user);
@@ -59,7 +60,7 @@ class UserController extends AbstractController
         if($form->isSubmitted() && $form->isValid())
         {
             $userRepository->add($user, true);
-            return $this->json($user, 201);
+            return $this->json($user, Response::HTTP_ACCEPTED);
         }
 
         return $this->json($form->getErrors(true), 400);
@@ -70,11 +71,11 @@ class UserController extends AbstractController
     {
         if(!$user)
         {
-            return $this->json(['message'=> 'User not found'], 404);
+            return $this->json(null, Response::HTTP_NOT_FOUND);
         }
 
         $userRepository->remove($user, true);
 
-        return $this->json([],204);
+        return $this->json(null,Response::HTTP_NO_CONTENT);
     }
 }

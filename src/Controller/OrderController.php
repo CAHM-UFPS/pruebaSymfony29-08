@@ -9,6 +9,7 @@ use App\Repository\OrderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/orders')]
@@ -19,7 +20,7 @@ class OrderController extends AbstractController
     {
         if(!$user)
         {
-            return $this->json(['message'=>'User not found'], 404);
+            return $this->json(null, Response::HTTP_NOT_FOUND);
         }
 
         $order = new Order();
@@ -30,10 +31,10 @@ class OrderController extends AbstractController
         if($form->isValid() && $form->isSubmitted())
         {
             $orderRepository->add($order, true);
-            return $this->json($order);
+            return $this->json($order, Response::HTTP_CREATED);
         }
 
-        return $this->json($form->getErrors(), 400);
+        return $this->json($form->getErrors(), Response::HTTP_BAD_REQUEST);
     }
 
     #[Route('/read', name: 'listOrders', methods: ['GET'])]
@@ -47,12 +48,13 @@ class OrderController extends AbstractController
     {
         if(!$user)
         {
-            return $this->json(['message'=> 'User not found'], 404);
+            return $this->json(null, Response::HTTP_NOT_FOUND);
         }
 
         return $this->json([
             'email'=>$user->getEmail(),
-            'orders'=>$orderRepository->findBy(['userid'=>$user->getId()])
+            'orders'=>$orderRepository->findBy(['userid'=>$user->getId()]),
+            Response::HTTP_OK
         ]);
     }
 
@@ -62,7 +64,7 @@ class OrderController extends AbstractController
     {
         if(!$user || !$order)
         {
-            return $this->json(['message'=>'Not found'], 404);
+            return $this->json(null, Response::HTTP_NOT_FOUND);
         }
 
         $form = $this->createForm(OrderType::class, $order);
@@ -71,7 +73,7 @@ class OrderController extends AbstractController
         if($form->isSubmitted() && $form->isValid())
         {
             $orderRepository->add($order, true);
-            return $this->json($order, 201);
+            return $this->json($order, Response::HTTP_ACCEPTED);
         }
 
         return $this->json($form->getErrors(), 400);
@@ -83,11 +85,11 @@ class OrderController extends AbstractController
     {
         if(!$user || !$order)
         {
-            return $this->json(['message'=>'User or Order not found'], 404);
+            return $this->json(null, Response::HTTP_NOT_FOUND);
         }
 
         $orderRepository->remove($order, true);
 
-        return $this->json([], 204);
+        return $this->json([], Response::HTTP_NO_CONTENT);
     }
 }
