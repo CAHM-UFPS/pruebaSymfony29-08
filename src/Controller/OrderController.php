@@ -51,11 +51,13 @@ class OrderController extends AbstractController
             return $this->json(null, Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json([
+        return $this->json(
+            [
             'email'=>$user->getEmail(),
-            'orders'=>$orderRepository->findBy(['userid'=>$user->getId()]),
+            'orders'=>$orderRepository->findBy(['userid'=>$user->getId()])
+            ],
             Response::HTTP_OK
-        ]);
+        );
     }
 
     #[Route('/update/user/{email}/order/{id}', name: 'updateOrder', methods: ['PUT'])]
