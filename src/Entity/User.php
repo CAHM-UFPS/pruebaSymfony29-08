@@ -34,6 +34,9 @@ class User
     #[Assert\Email]
     private ?string $email = null;
 
+    #[ORM\Column]
+    private ?bool $registerwelcome = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +74,18 @@ class User
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function isRegisterwelcome(): ?bool
+    {
+        return $this->registerwelcome;
+    }
+
+    public function setRegisterwelcome(bool $registerwelcome): self
+    {
+        $this->registerwelcome = $registerwelcome;
 
         return $this;
     }
