@@ -5,18 +5,20 @@ namespace App\Controller;
 use App\Entity\Order;
 use App\Entity\User;
 use App\Form\OrderType;
+use App\Message\Notification;
 use App\Repository\OrderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/orders')]
 class OrderController extends AbstractController
 {
     #[Route('/create/{email}', name: 'createOrder', methods: ['POST'])]
-    public function create(User $user = null, Request $request, OrderRepository $orderRepository) : JsonResponse
+    public function create(User $user = null, Request $request, OrderRepository $orderRepository, MessageBusInterface $bus) : JsonResponse
     {
         if(!$user)
         {
@@ -31,6 +33,7 @@ class OrderController extends AbstractController
         if($form->isValid() && $form->isSubmitted())
         {
             $orderRepository->add($order, true);
+            $bus->dispatch(new Notification("Welcome, you have registered"));
             return $this->json($order, Response::HTTP_CREATED);
         }
 
