@@ -33,7 +33,7 @@ class OrderController extends AbstractController
         if($form->isValid() && $form->isSubmitted())
         {
             $orderRepository->add($order, true);
-            $bus->dispatch(new Notification("Welcome, you have registered"));
+            $bus->dispatch(new Notification("Welcome, you have registered"), $user);
             return $this->json($order, Response::HTTP_CREATED);
         }
 
